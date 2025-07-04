@@ -1,18 +1,18 @@
-package com.example.seniya_v2.dto.admin.course.response;
+package com.example.seniya_v2.dto.admin.course.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-@Getter
-@Builder
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
-public class CourseResponseDto {
-    private Long id;
-    private String name;
+@Builder
+public class UpdateCourseRequestDto {
     private Long trainerId;
     private String title;
     private String description;
@@ -21,6 +21,4 @@ public class CourseResponseDto {
     private LocalTime classEndTime;
     private Category category;
     private String classroom;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

@@ -10,10 +10,10 @@ import java.time.LocalTime;
 @Getter
 @Builder
 @AllArgsConstructor
-public class CourseResponseDto {
-    private Long id;
-    private String name;
+public class GetCourseDetailResponseDto {
+    private Long courseId;
     private Long trainerId;
+    private String trainerName;
     private String title;
     private String description;
     private LocalDateTime classDate;

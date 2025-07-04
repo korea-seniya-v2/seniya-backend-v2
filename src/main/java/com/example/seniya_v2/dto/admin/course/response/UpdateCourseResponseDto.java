@@ -10,10 +10,8 @@ import java.time.LocalTime;
 @Getter
 @Builder
 @AllArgsConstructor
-public class CourseResponseDto {
-    private Long id;
+public class UpdateCourseResponseDto {
     private String name;
-    private Long trainerId;
     private String title;
     private String description;
     private LocalDateTime classDate;
@@ -21,6 +19,4 @@ public class CourseResponseDto {
     private LocalTime classEndTime;
     private Category category;
     private String classroom;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }
