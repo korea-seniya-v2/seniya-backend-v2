@@ -5,20 +5,14 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Getter
 @Builder
 @AllArgsConstructor
-public class CourseResponseDto {
-    private Long id;
+public class GetAllCourseResponseDto {
     private String name;
-    private Long trainerId;
     private String title;
-    private String description;
     private LocalDateTime classDate;
-    private LocalTime classStartTime;
-    private LocalTime classEndTime;
     private Category category;
     private String classroom;
     private LocalDateTime createdAt;
