@@ -1,5 +1,6 @@
 package com.example.seniya_v2.entity;
 
+import com.example.seniya_v2.common.enums.Category;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,16 +15,21 @@ import java.time.LocalTime;
 @Builder
 public class Course extends BaseTimeEntity{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "course_id", nullable = false)
     private Long courseId;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "category", nullable = false)
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "trainer_id")
+    @JoinColumn(name = "trainer_id", nullable = false)
     private TrainerProfile trainerProfile;
 
+    @Column(name = "title", nullable = false)
     private String title;
+
+    @Column(name = "description", nullable = false)
     private String description;
 
     @Column(name = "course_date", nullable = false)

@@ -1,9 +1,11 @@
 package com.example.seniya_v2.entity;
 
+import com.example.seniya_v2.common.enums.DiseaseStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "diseases")
@@ -13,6 +15,7 @@ import java.time.LocalDate;
 @Builder
 public class Disease {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long diseaseId;
 
     private String diseaseName;
@@ -26,6 +29,6 @@ public class Disease {
     private List<Medication> medication;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "diseaseStatus", nullable = false)
     private DiseaseStatus diseaseStatus;
-
 }
