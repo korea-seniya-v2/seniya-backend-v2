@@ -1,0 +1,16 @@
+package com.example.seniya_v2.dto.trainer.response;
+
+import lombok.*;
+
+@Setter
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class PopularTrainerResponseDto {
+    private Long trainerId;
+    private String name;
+    private Specialty specialty;
+    private String profileImageUrl;
+    private Integer courseCount;
+}
