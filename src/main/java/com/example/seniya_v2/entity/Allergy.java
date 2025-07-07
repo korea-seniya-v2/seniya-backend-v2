@@ -11,12 +11,16 @@ import lombok.*;
 @Builder
 public class Allergy {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "allergy_id", nullable = false)
     private Long allergyId;
 
+    @Column(name = "allergy_name", nullable = false)
     private String allergyName;
+
+    @Column(name = "reaction", nullable = false)
     private String reaction;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "health_data_id")
     private HealthData healthData;
 }
