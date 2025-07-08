@@ -1,5 +1,6 @@
 package com.example.seniya_v2.dto.admin.user.response;
 
+import com.example.seniya_v2.common.enums.Category;
 import lombok.*;
 
 import java.math.BigDecimal;

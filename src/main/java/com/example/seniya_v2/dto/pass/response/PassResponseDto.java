@@ -1,5 +1,6 @@
 package com.example.seniya_v2.dto.pass.response;
 
+import com.example.seniya_v2.entity.Pass;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -19,7 +20,7 @@ public class PassResponseDto {
     public static PassResponseDto fromEntity(Pass pass) {
         return PassResponseDto.builder()
                 .passId(pass.getPassId())
-                .couponType(pass.getCouponType())
+                .couponType(pass.getCouponType().name())
                 .used(pass.isUsed())
                 .issuedAt(pass.getIssuedAt())
                 .expiresAt(pass.getExpiresAt())

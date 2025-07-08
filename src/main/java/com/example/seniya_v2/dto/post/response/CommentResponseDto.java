@@ -1,5 +1,6 @@
 package com.example.seniya_v2.dto.post.response;
 
+import com.example.seniya_v2.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

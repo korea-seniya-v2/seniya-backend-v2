@@ -1,5 +1,6 @@
 package com.example.seniya_v2.dto.course.response;
 
+import com.example.seniya_v2.common.enums.Category;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

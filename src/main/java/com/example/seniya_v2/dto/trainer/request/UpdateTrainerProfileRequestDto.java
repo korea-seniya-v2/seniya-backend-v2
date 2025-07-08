@@ -1,5 +1,6 @@
 package com.example.seniya_v2.dto.trainer.request;
 
+import com.example.seniya_v2.common.enums.Specialty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
