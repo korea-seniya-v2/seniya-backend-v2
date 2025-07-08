@@ -1,5 +1,6 @@
 package com.example.seniya_v2.dto.healthdata.disease.request;
 
+import com.example.seniya_v2.common.enums.DiseaseStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

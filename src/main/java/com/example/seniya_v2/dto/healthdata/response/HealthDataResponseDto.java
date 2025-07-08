@@ -1,5 +1,6 @@
 package com.example.seniya_v2.dto.healthdata.response;
 
+import com.example.seniya_v2.common.enums.BloodPressure;
 import com.example.seniya_v2.dto.healthdata.allergy.response.AllergyResponseDto;
 import com.example.seniya_v2.dto.healthdata.disease.response.DiseaseResponseDto;
 import com.example.seniya_v2.dto.healthdata.medication.response.MedicationResponseDto;

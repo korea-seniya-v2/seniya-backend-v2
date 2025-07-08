@@ -1,5 +1,6 @@
 package com.example.seniya_v2.dto.healthdata.allergy.response;
 
+import com.example.seniya_v2.entity.Allergy;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

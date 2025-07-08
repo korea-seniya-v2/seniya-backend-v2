@@ -1,5 +1,6 @@
 package com.example.seniya_v2.dto.trainer.response;
 
+import com.example.seniya_v2.common.enums.ApprovalStatus;
 import lombok.*;
 
 import java.time.LocalDate;

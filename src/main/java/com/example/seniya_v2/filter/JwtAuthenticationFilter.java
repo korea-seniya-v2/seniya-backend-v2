@@ -1,63 +1,47 @@
 package com.example.seniya_v2.filter;
 
-import com.example.seniya_v2.provider.JwtProvider;
-import jakarta.servlet.*;
+import com.example.seniya_v2.entity.UserPrincipal;
+import com.example.seniya_v2.provider.JwtTokenProvider;
+import com.example.seniya_v2.service.implementations.CustomUserDetailsService;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
 
-@Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final JwtProvider jwtProvider;
+
+    private final JwtTokenProvider tokenProvider;
+    private final CustomUserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request
-            , HttpServletResponse response
-            , FilterChain filterChain
-    ) throws ServletException, IOException{
-        try {
-            String authorizationHeader = request.getHeader("Authorization");
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-            String token = (authorizationHeader != null && authorizationHeader.startsWith("Bearer "))
-                    ? jwtProvider.removeBearer(authorizationHeader)
-                    : null;
+        String token = resolveToken(request);
+        if (token != null && tokenProvider.validateToken(token)) {
+            Long userId = tokenProvider.getUserId(token);
+            UserPrincipal userDetails = userDetailsService.loadUserByUsername(userId.toString());
 
-            if (token == null || !jwtProvider.isValidToken(token)) {
-                filterChain.doFilter(request, response);
-                return;
-            }
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-            String username = jwtProvider.getUsenameFromJwt(token);
-            String roles = jwtProvider.getRoleFromJwt(token);
-            setAuthenticationContext(request,username,roles);
-        } catch (Exception e) {
-            e.printStackTrace();
+            SecurityContextHolder.getContext().setAuthentication(authToken);
         }
+
         filterChain.doFilter(request, response);
     }
 
-    private void setAuthenticationContext(HttpServletRequest request, String username, String role) {
-        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role);
-        AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, Collections.singletonList(authority));
-        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        securityContext.setAuthentication(authenticationToken);
-        SecurityContextHolder.setContext(securityContext);
-
+    private String resolveToken(HttpServletRequest request) {
+        String bearer = request.getHeader("Authorization");
+        if (bearer != null && bearer.startsWith("Bearer ")) {
+            return bearer.substring(7);
+        }
+        return null;
     }
 
 }
