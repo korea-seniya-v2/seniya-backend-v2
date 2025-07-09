@@ -1,15 +1,35 @@
 package com.example.seniya_v2.controller.admin;
 
 import com.example.seniya_v2.common.constants.ApiMappingPattern;
+import com.example.seniya_v2.dto.ResponseDto;
+import com.example.seniya_v2.dto.admin.user.response.GetAllUserResponseDto;
+import com.example.seniya_v2.dto.admin.user.response.GetUserDetailResponseDto;
+import com.example.seniya_v2.service.AdminUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ApiMappingPattern.ADMIN_USER_API)
 public class AdminUserController {
+    private final AdminUserService adminUserService;
 
+    @GetMapping
+    public ResponseEntity<ResponseDto<List<GetAllUserResponseDto>>> getAllUser() {
+        ResponseDto<List<GetAllUserResponseDto>> response = adminUserService.getAllUser();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
-
+    @GetMapping("/{userId}")
+    public ResponseEntity<ResponseDto<GetUserDetailResponseDto>> getUserDetail(@PathVariable Long userId) {
+        ResponseDto<GetUserDetailResponseDto> response = adminUserService.getUserDetail(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }

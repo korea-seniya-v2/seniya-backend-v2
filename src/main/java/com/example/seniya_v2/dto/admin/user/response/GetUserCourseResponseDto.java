@@ -19,6 +19,7 @@ public class GetUserCourseResponseDto {
     private LocalTime courseStartTime;
     private LocalTime courseEndTime;
     private Category category;
+    private String courseRoom;
     private LocalDateTime courseCreatedAt;
     private LocalDateTime courseUpdatedAt;
     private Long trainerId;
