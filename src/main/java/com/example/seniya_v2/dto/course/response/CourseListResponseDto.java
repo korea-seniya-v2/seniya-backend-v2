@@ -15,6 +15,7 @@ public class CourseListResponseDto {
     private Long courseId;
     private String name;
     private String title;
+    private String description;
     private LocalDateTime classDate;
     private LocalTime classStartTime;
     private LocalTime classEndTime;

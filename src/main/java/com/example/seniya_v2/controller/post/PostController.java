@@ -1,0 +1,91 @@
+package com.example.seniya_v2.controller.post;
+
+import com.example.seniya_v2.common.constants.ApiMappingPattern;
+import com.example.seniya_v2.dto.ResponseDto;
+import com.example.seniya_v2.dto.post.request.PostCreateRequestDto;
+import com.example.seniya_v2.dto.post.request.PostUpdateRequestDto;
+import com.example.seniya_v2.dto.post.response.PopularPostResponseDto;
+import com.example.seniya_v2.dto.post.response.PostDetailResponseDto;
+import com.example.seniya_v2.dto.post.response.PostListResponseDto;
+import com.example.seniya_v2.dto.post.response.PostResponseDto;
+import com.example.seniya_v2.service.PostService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
+
+@RestController
+@RequestMapping(ApiMappingPattern.POST_API)
+@RequiredArgsConstructor
+public class PostController {
+    private final PostService postService;
+
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ResponseDto<PostResponseDto>> createPost(
+            @AuthenticationPrincipal String username,
+            @RequestPart(name = "data", required = false)PostCreateRequestDto dto,
+            @RequestPart(value = "file", required = false)List<MultipartFile> files
+            ) throws IOException {
+        ResponseDto<PostResponseDto> response = postService.createPost(username, dto, files);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PostMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ResponseDto<PostDetailResponseDto>> updatePost(
+            @AuthenticationPrincipal String username,
+            @PathVariable Long postId,
+            @RequestPart(value = "data", required = false)PostUpdateRequestDto dto,
+            @RequestPart(value = "file", required = false)List<MultipartFile> files
+            ) throws IOException {
+        ResponseDto<PostDetailResponseDto> response = postService.updatePost(username, postId, dto, files);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<ResponseDto<?>> deletePost(
+            @AuthenticationPrincipal String username,
+            @PathVariable("postId") Long postId) {
+        ResponseDto<?> response = postService.deletePost(username, postId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<ResponseDto<List<PostListResponseDto>>> getPostList() {
+        ResponseDto<List<PostListResponseDto>> posts = postService.getAllPosts();
+        return ResponseEntity.status(HttpStatus.OK).body(posts);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseDto<PostDetailResponseDto>> getPostById(@PathVariable Long id) {
+        ResponseDto<PostDetailResponseDto> response = postService.getPostById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/search-by-title")
+    public ResponseEntity<ResponseDto<List<PostListResponseDto>>> searchByTitle(@RequestParam String title) {
+        ResponseDto<List<PostListResponseDto>> posts = postService.searchByTitle(title);
+        return ResponseEntity.status(HttpStatus.OK).body(posts);
+    }
+
+    @GetMapping("/search-by-role")
+    public ResponseEntity<ResponseDto<List<PostListResponseDto>>> searchByRole(@RequestParam String roleName) {
+        ResponseDto<List<PostListResponseDto>> posts = postService.searchByRole(roleName);
+        return ResponseEntity.status(HttpStatus.OK).body(posts);
+    }
+
+    @GetMapping("/popular")
+    public ResponseEntity<ResponseDto<List<PopularPostResponseDto>>>  getPopularPosts(
+            @RequestParam(defaultValue = "5") int limit
+    ) {
+        ResponseDto<List<PopularPostResponseDto>> popularPosts = postService.getPopularPosts(limit);
+        return ResponseEntity.status(HttpStatus.OK).body(popularPosts);
+    }
+
+
+}
