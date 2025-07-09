@@ -95,4 +95,5 @@ public class AuthServiceImpl implements AuthService {
     public ResponseDto<?> logout(String username) {
         return ResponseDto.success(ResponseCode.SUCCESS, "로그아웃 처리 완료").getBody();
     }
+
 }

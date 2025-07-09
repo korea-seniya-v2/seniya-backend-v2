@@ -20,4 +20,5 @@ public interface TrainerProfileService {
     ResponseDto<TrainerProfileResponseDto> updateProfile(String username, @Valid UpdateTrainerProfileRequestDto dto, MultipartFile file) throws NoPermissionException, IOException;
 
     ResponseDto<PopularTrainerResponseDto> popularTrainer();
+
 }

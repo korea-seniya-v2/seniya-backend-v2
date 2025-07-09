@@ -18,4 +18,5 @@ public interface TrainerApplicationService {
     ResponseDto<TrainerApplicationDetailResponseDto> getApplicationById(Long id);
 
     ResponseDto<TrainerApplicationStatusResponseDto> updateStatus(Long id, TrainerApplicationStatusRequestDto dto);
+
 }

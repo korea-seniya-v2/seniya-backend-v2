@@ -28,4 +28,5 @@ public interface PostService {
     ResponseDto<List<PostListResponseDto>> searchByRole(String roleName);
 
     ResponseDto<List<PopularPostResponseDto>> getPopularPosts(int limit);
+
 }

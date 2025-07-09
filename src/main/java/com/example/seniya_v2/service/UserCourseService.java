@@ -18,4 +18,5 @@ public interface UserCourseService {
     ResponseDto<List<CourseListResponseDto>> getCoursesByCategory(Category category);
 
     ResponseDto<List<CourseListResponseDto>> getCoursesByTrainerName(String trainerName);
+
 }
