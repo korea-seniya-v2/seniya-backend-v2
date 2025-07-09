@@ -20,9 +20,13 @@ public class JwtTokenProvider {
     private String secretKey;
 
     @Value("${jwt.expiration}")
-    private long expirationTime;
+    private int expirationTime;
 
     private Key key;
+
+    public int getExpiration() {
+        return expirationTime;
+    }
 
     @PostConstruct
     public void init() {

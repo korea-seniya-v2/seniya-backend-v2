@@ -15,7 +15,7 @@ import java.time.LocalTime;
 public class CourseApplyResponseDto {
     private Long courseId;
     private Long userId;
-    private String username;
+    private String userName;
     private Long trainerId;
     private String trainerName;
     private String title;
