@@ -3,6 +3,7 @@ package com.example.seniya_v2.controller.participationController;
 import com.example.seniya_v2.common.constants.ApiMappingPattern;
 import com.example.seniya_v2.dto.ResponseDto;
 import com.example.seniya_v2.dto.participation.response.ParticipationCancelResponseDto;
+import com.example.seniya_v2.dto.participation.response.ParticipationInfoResponseDto;
 import com.example.seniya_v2.dto.participation.response.ParticipationResponseDto;
 import com.example.seniya_v2.service.ParticipationService;
 import lombok.RequiredArgsConstructor;
@@ -20,27 +21,28 @@ public class ParticipationController {
 
     private final ParticipationService participationService;
 
+    // 사용자가 신청한 수업 목록 조회
     @GetMapping("/me")
-    public ResponseEntity<ResponseDto<List<ParticipationResponseDto>>> getMyParticipation(@AuthenticationPrincipal String username) {
-        ResponseDto<List<ParticipationResponseDto>> response = participationService.getMyParticipation(username);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+    public List<ParticipationResponseDto> getMyParticipations(@AuthenticationPrincipal(expression = "username") String username) {
+        return participationService.getMyParticipations(username);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseDto<ParticipationResponseDto>> getParticipationInfo(
-            @AuthenticationPrincipal String username,
-            @PathVariable Long id
+    // 단일 수업 신청 정보 조회
+    @GetMapping("/{participationId}")
+    public ParticipationInfoResponseDto getParticipationInfo(
+            @AuthenticationPrincipal(expression = "username") String username,
+            @PathVariable Long participationId
     ) {
-        ResponseDto<ParticipationResponseDto> response = participationService.getParticipationInfo(username, id);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return participationService.getParticipationInfo(username, participationId);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseDto<?>> cancelParticipation(
-            @AuthenticationPrincipal String username,
-            @PathVariable Long id
+
+    //수업 신청 취소
+    @DeleteMapping("/{participationId}")
+    public ParticipationCancelResponseDto cancelParticipation(
+            @AuthenticationPrincipal(expression = "username") String username,
+            @PathVariable Long participationId
     ) {
-        participationService.cancelParticipation(username, id);
-        return ResponseEntity.noContent().build();
+        return participationService.cancelParticipation(username, participationId);
     }
 }

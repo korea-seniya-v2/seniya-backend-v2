@@ -23,13 +23,11 @@ public class ParticipationServiceImpl implements ParticipationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ParticipationResponseDto> getMyParticipation(String username) {
+    public List<ParticipationResponseDto> getMyParticipations(String username) {
+        List<Participation> participation = participationRepository.findAllByUser_Username(username);
 
-        List<Participation> participations = participationRepository.findAllByUser_Username(username);
-
-        return participations.stream()
+        return participation.stream()
                 .map(p -> new ParticipationResponseDto(
-                        p.getParticipationId(),
                         p.getCourse().getCategory().name(),
                         p.getCourse().getTitle(),
                         p.getCourse().getDescription(),
@@ -45,10 +43,7 @@ public class ParticipationServiceImpl implements ParticipationService {
     @Override
     @Transactional(readOnly = true)
     public ParticipationInfoResponseDto getParticipationInfo(String username, Long participationId) {
-
-        Optional<Participation> participationOpt = participationRepository.findByParticipationIdAndUser_Username(participationId, username);
-
-        Participation participation = participationOpt
+        Participation participation = participationRepository.findByParticipationIdAndUser_Username(participationId, username)
                 .orElseThrow(() -> new IllegalArgumentException("해당 수업 신청 정보를 찾을 수 없습니다."));
 
         return new ParticipationInfoResponseDto(
@@ -64,10 +59,7 @@ public class ParticipationServiceImpl implements ParticipationService {
 
     @Override
     public ParticipationCancelResponseDto cancelParticipation(String username, Long participationId) {
-
-        Optional<Participation> participationOpt = participationRepository.findByParticipationIdAndUser_Username(participationId, username);
-
-        Participation participation = participationOpt
+        Participation participation = participationRepository.findByParticipationIdAndUser_Username(participationId, username)
                 .orElseThrow(() -> new IllegalArgumentException("해당 수업 신청 정보를 찾을 수 없습니다."));
 
         ParticipationInfoResponseDto info = new ParticipationInfoResponseDto(
