@@ -259,3 +259,4 @@ public class HealthDataServiceImpl implements HealthDataService {
 
         return ResponseDto.success(ResponseCode.SUCCESS, ResponseMessage.SUCCESS, responseDto).getBody();
     }
+}

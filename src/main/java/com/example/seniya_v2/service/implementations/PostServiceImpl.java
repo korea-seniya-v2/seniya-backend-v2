@@ -35,7 +35,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
-
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final UploadFileRepository uploadFileRepository;
@@ -44,8 +43,9 @@ public class PostServiceImpl implements PostService {
     private String uploadDir;
 
     @Override
-    public ResponseDto<PostResponseDto> createPost(String username, PostCreateRequestDto dto, List<MultipartFile> files) throws IOException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException(ResponseMessage.USER_NOT_FOUND));
+    public ResponseDto<PostResponseDto> createPost(String username, PostCreateRequestDto dto, List<MultipartFile> files) throws IOException{
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException(ResponseMessage.USER_NOT_FOUND));
 
         Post post = Post.builder()
                 .user(user)
@@ -56,17 +56,23 @@ public class PostServiceImpl implements PostService {
         post = postRepository.save(post);
 
         if (files != null && !files.isEmpty()) {
+            System.out.println("files.size() = " + files.size());
             for (MultipartFile file : files) {
+                System.out.println("file.isEmpty() = " + file.isEmpty());
+                System.out.println("file.getOriginalFilename() = " + file.getOriginalFilename());
                 if (!file.isEmpty()) {
-//                    saveFile(file, post.getPostId(), TargetType.POST);
+                    saveFile(file, post.getPostId(), TargetType.POST);
                 }
             }
+        } else {
+            System.out.println("files is null or empty");
         }
+
 
         List<UploadFile> uploadFiles = uploadFileRepository.findByTargetIdAndTargetType(post.getPostId(), TargetType.POST);
         List<String> imageUrls = uploadFiles.stream()
                 .map(UploadFile::getFilePath)
-                .collect(Collectors.toList());
+                .toList();
 
         PostResponseDto responseDto = PostResponseDto.builder()
                 .postId(post.getPostId())
@@ -146,6 +152,7 @@ public class PostServiceImpl implements PostService {
 
         return ResponseDto.success(ResponseCode.SUCCESS, ResponseMessage.SUCCESS, responseDto).getBody();
     }
+
 
     @Override
     @Transactional
@@ -276,32 +283,22 @@ public class PostServiceImpl implements PostService {
     private void saveFile(MultipartFile file, Long targetId, TargetType type) throws IOException {
         File dir = new File(uploadDir);
         if (!dir.exists()) {
-            boolean created = dir.mkdirs();
-            System.out.println("디렉토리 생성 여부: " + created);
+            dir.mkdir();
         }
 
         String original = file.getOriginalFilename();
-        String uuidName = UUID.randomUUID() + "_" + original;
-        String fullPath = uploadDir + "/" + uuidName;
+        String uuid = UUID.randomUUID() + "_" + original;
+        file.transferTo(new File(uploadDir + "/" + uuid));
 
-        try {
-            file.transferTo(new File(fullPath));
-            System.out.println("파일 저장 성공: " + fullPath);
-        } catch (IOException e) {
-            System.err.println("파일 저장 실패: " + e.getMessage());
-            throw e;
-        }
-
-        UploadFile uf = new UploadFile();
-        uf.setOriginalName(original);
-        uf.setFileName(uuidName);
-        uf.setFilePath("/files/" + uuidName);
-        uf.setFileSize(file.getSize());
-        uf.setFileType(file.getContentType());
-        uf.setTargetId(targetId);
-        uf.setTargetType(type);
-
+        UploadFile uf = UploadFile.builder()
+                .originalName(original)
+                .fileName(uuid)
+                .filePath("/files/" + uuid)
+                .fileType(file.getContentType())
+                .fileSize(file.getSize())
+                .targetId(targetId)
+                .targetType(type)
+                .build();
         uploadFileRepository.save(uf);
-        System.out.println("UploadFile 저장 완료: " + uf.getFileName());
     }
 }

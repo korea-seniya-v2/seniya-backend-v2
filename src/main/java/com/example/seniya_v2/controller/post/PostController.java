@@ -26,27 +26,30 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
 
+    // 게시글 생성
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseDto<PostResponseDto>> createPost(
             @AuthenticationPrincipal String username,
-            @RequestPart(name = "data", required = false)PostCreateRequestDto dto,
-            @RequestPart(value = "file", required = false)List<MultipartFile> files
-            ) throws IOException {
+            @RequestPart(name = "data", required = false) PostCreateRequestDto dto,
+            @RequestPart(value = "file", required = false) List<MultipartFile> files
+    ) throws IOException {
         ResponseDto<PostResponseDto> response = postService.createPost(username, dto, files);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    // 게시글 수정
     @PostMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseDto<PostDetailResponseDto>> updatePost(
             @AuthenticationPrincipal String username,
             @PathVariable Long postId,
-            @RequestPart(value = "data", required = false)PostUpdateRequestDto dto,
-            @RequestPart(value = "file", required = false)List<MultipartFile> files
-            ) throws IOException {
+            @RequestPart(value = "data", required = false) PostUpdateRequestDto dto,
+            @RequestPart(value = "file", required = false) List<MultipartFile> files
+    ) throws IOException {
         ResponseDto<PostDetailResponseDto> response = postService.updatePost(username, postId, dto, files);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.ok(response);
     }
 
+    // 게시글 삭제
     @DeleteMapping("/{postId}")
     public ResponseEntity<ResponseDto<?>> deletePost(
             @AuthenticationPrincipal String username,
@@ -55,23 +58,28 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    // 게시글 전체 조회
     @GetMapping
     public ResponseEntity<ResponseDto<List<PostListResponseDto>>> getPostList() {
         ResponseDto<List<PostListResponseDto>> posts = postService.getAllPosts();
         return ResponseEntity.status(HttpStatus.OK).body(posts);
     }
 
+    // 게시글 단건 조회
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDto<PostDetailResponseDto>> getPostById(@PathVariable Long id) {
         ResponseDto<PostDetailResponseDto> response = postService.getPostById(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+
+    // 게시글 제목 검색
     @GetMapping("/search-by-title")
     public ResponseEntity<ResponseDto<List<PostListResponseDto>>> searchByTitle(@RequestParam String title) {
         ResponseDto<List<PostListResponseDto>> posts = postService.searchByTitle(title);
         return ResponseEntity.status(HttpStatus.OK).body(posts);
     }
+
 
     @GetMapping("/search-by-role")
     public ResponseEntity<ResponseDto<List<PostListResponseDto>>> searchByRole(@RequestParam String roleName) {
@@ -80,12 +88,10 @@ public class PostController {
     }
 
     @GetMapping("/popular")
-    public ResponseEntity<ResponseDto<List<PopularPostResponseDto>>>  getPopularPosts(
-            @RequestParam(defaultValue = "5") int limit
-    ) {
+    public ResponseEntity<ResponseDto<List<PopularPostResponseDto>>> getPopularPosts(
+            @RequestParam(defaultValue = "5") int limit) {
         ResponseDto<List<PopularPostResponseDto>> popularPosts = postService.getPopularPosts(limit);
         return ResponseEntity.status(HttpStatus.OK).body(popularPosts);
     }
-
 
 }

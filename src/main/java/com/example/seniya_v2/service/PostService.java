@@ -7,17 +7,18 @@ import com.example.seniya_v2.dto.post.response.PopularPostResponseDto;
 import com.example.seniya_v2.dto.post.response.PostDetailResponseDto;
 import com.example.seniya_v2.dto.post.response.PostListResponseDto;
 import com.example.seniya_v2.dto.post.response.PostResponseDto;
+import jakarta.validation.Valid;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
 
 public interface PostService {
-    ResponseDto<PostResponseDto> createPost(String username, PostCreateRequestDto dto, List<MultipartFile> files) throws IOException;
+    ResponseDto<PostResponseDto> createPost(String username, @Valid PostCreateRequestDto dto, List<MultipartFile> files) throws IOException;
 
-    ResponseDto<PostDetailResponseDto> updatePost(String username, Long postId, PostUpdateRequestDto dto, List<MultipartFile> files) throws IOException;
+    ResponseDto<PostDetailResponseDto> updatePost(String username, Long id, @Valid PostUpdateRequestDto dto, List<MultipartFile> files) throws IOException;
 
-    ResponseDto<?> deletePost(String username, Long postId);
+    ResponseDto<?> deletePost(String username, Long id);
 
     ResponseDto<List<PostListResponseDto>> getAllPosts();
 
@@ -28,5 +29,4 @@ public interface PostService {
     ResponseDto<List<PostListResponseDto>> searchByRole(String roleName);
 
     ResponseDto<List<PopularPostResponseDto>> getPopularPosts(int limit);
-
 }
