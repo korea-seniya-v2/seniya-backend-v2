@@ -1,5 +1,7 @@
 package com.example.seniya_v2.service.implementations;
 
+import com.example.seniya_v2.common.constants.ResponseCode;
+import com.example.seniya_v2.common.constants.ResponseMessage;
 import com.example.seniya_v2.dto.ResponseDto;
 import com.example.seniya_v2.dto.comment.request.CommentCreateRequestDto;
 import com.example.seniya_v2.dto.comment.request.CommentUpdateRequestDto;
@@ -28,10 +30,10 @@ public class CommentServiceImpl implements CommentService {
     public ResponseDto<CommentCreateResponseDto> createComment(Long postId, CommentCreateRequestDto dto, String username) {
         CommentCreateResponseDto response = null;
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new EntityNotFoundException("x"));
+                .orElseThrow(() -> new EntityNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND));
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("x"));
+                .orElseThrow(() -> new EntityNotFoundException(ResponseMessage.USER_NOT_FOUND));
 
         Comment newComment = Comment.builder()
                 .post(post)
@@ -56,10 +58,10 @@ public class CommentServiceImpl implements CommentService {
         CommentUpdateResponseDto response = null;
 
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new EntityNotFoundException("X"));
+                .orElseThrow(() -> new EntityNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND));
 
         if (!comment.getPost().getPostId().equals(postId)) {
-            throw new IllegalArgumentException("x");
+            throw new IllegalArgumentException(ResponseMessage.FAILED);
         }
 
         comment.setContent(dto.getContent());
@@ -79,12 +81,11 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteComment(Long postId, Long commentId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new EntityNotFoundException("x"));
+                .orElseThrow(() -> new EntityNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND));
 
         if (!comment.getPost().getPostId().equals(postId)) {
-            throw new IllegalArgumentException("x");
+            throw new IllegalArgumentException(ResponseMessage.FAILED);
         }
-
         commentRepository.delete(comment);
     }
 }

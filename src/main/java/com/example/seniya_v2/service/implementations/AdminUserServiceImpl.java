@@ -1,5 +1,7 @@
 package com.example.seniya_v2.service.implementations;
 
+import com.example.seniya_v2.common.constants.ResponseCode;
+import com.example.seniya_v2.common.constants.ResponseMessage;
 import com.example.seniya_v2.dto.ResponseDto;
 import com.example.seniya_v2.dto.admin.user.response.GetAllUserResponseDto;
 import com.example.seniya_v2.dto.admin.user.response.GetUserCourseResponseDto;
@@ -21,7 +23,7 @@ import java.util.stream.Collectors;
 public class AdminUserServiceImpl implements AdminUserService {
 
     private final UserRepository userRepository;
-    private UserDetailMapper userDetailMapper;
+    private final UserDetailMapper userDetailMapper;
 
     @Override
     public ResponseDto<List<GetAllUserResponseDto>> getAllUser() {
@@ -48,7 +50,7 @@ public class AdminUserServiceImpl implements AdminUserService {
         List<GetUserDetailFlatRow> rows = userDetailMapper.getUserDetail(userId);
 
         if (rows.isEmpty()) {
-            throw new EntityNotFoundException(ResponseMessage);
+            throw new EntityNotFoundException(ResponseMessage.USER_NOT_FOUND);
         }
 
         GetUserDetailFlatRow first = rows.get(0);

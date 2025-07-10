@@ -1,5 +1,7 @@
 package com.example.seniya_v2.service.implementations;
 
+import com.example.seniya_v2.common.constants.ResponseCode;
+import com.example.seniya_v2.common.constants.ResponseMessage;
 import com.example.seniya_v2.dto.ResponseDto;
 import com.example.seniya_v2.dto.admin.course.request.CreateCourseRequestDto;
 import com.example.seniya_v2.dto.admin.course.request.UpdateCourseRequestDto;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -62,7 +65,7 @@ public class CourseServiceImpl implements CourseService {
         UpdateCourseResponseDto respDto = null;
 
         Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("X"));
+                .orElseThrow(() -> new EntityNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND));
 
         if (dto.getTitle() != null) course.setTitle(dto.getTitle());
         if (dto.getDescription() != null) course.setDescription(dto.getDescription());
@@ -83,21 +86,70 @@ public class CourseServiceImpl implements CourseService {
                 .classStartTime(updatedCourse.getStartTime())
                 .classEndTime(updatedCourse.getEndTime())
                 .category(updatedCourse.getCategory())
-                .
+                .classroom(updatedCourse.getRoom())
+                .build();
+
+        return ResponseDto.success(ResponseCode.SUCCESS, ResponseMessage.SUCCESS, respDto).getBody();
     }
 
     @Override
     public ResponseDto<List<CourseResponseDto>> geAllCourses() {
-        return null;
+        List<CourseResponseDto> respDto = null;
+
+        List<Course> courses = courseRepository.findAll();
+
+        respDto = courses.stream()
+                .map(course -> CourseResponseDto.builder()
+                        .id(course.getCourseId())
+                        .trainerId(course.getTrainerProfile().getTrainerId())
+                        .name(course.getTrainerProfile().getUser().getName())
+                        .title(course.getTitle())
+                        .description(course.getDescription())
+                        .classDate(course.getDate())
+                        .classStartTime(course.getStartTime())
+                        .classEndTime(course.getEndTime())
+                        .category(course.getCategory())
+                        .classroom(course.getRoom())
+                        .createdAt(course.getCreatedAt())
+                        .updatedAt(course.getUpdatedAt())
+                        .build()
+                ).collect(Collectors.toList());
+
+        return ResponseDto.success(ResponseCode.SUCCESS, ResponseMessage.SUCCESS, respDto).getBody();
     }
 
     @Override
     public ResponseDto<GetCourseDetailResponseDto> getCourseById(Long id) {
-        return null;
+        GetCourseDetailResponseDto respDto = null;
+
+        Course course = courseRepository.findById(id)
+                        .orElseThrow(() -> new EntityNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND));
+
+        respDto = GetCourseDetailResponseDto.builder()
+                .courseId(course.getCourseId())
+                .trainerId(course.getTrainerProfile().getTrainerId())
+                .trainerName(course.getTrainerProfile().getUser().getName())
+                .title(course.getTitle())
+                .description(course.getDescription())
+                .classDate(course.getDate())
+                .classStartTime(course.getStartTime())
+                .classEndTime(course.getEndTime())
+                .category(course.getCategory())
+                .classroom(course.getRoom())
+                .createdAt(course.getCreatedAt())
+                .updatedAt(course.getUpdatedAt())
+                .build();
+
+        return ResponseDto.success(ResponseCode.SUCCESS, ResponseMessage.SUCCESS, respDto).getBody();
     }
 
     @Override
-    public void deleteCourse(Long id) {
+    public ResponseDto<?> deleteCourse(Long id) {
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(ResponseMessage.RESOURCE_NOT_FOUND));
 
+        courseRepository.delete(course);
+
+        return ResponseDto.success(ResponseCode.SUCCESS, ResponseMessage.SUCCESS).getBody();
     }
 }
