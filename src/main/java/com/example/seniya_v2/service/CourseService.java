@@ -19,5 +19,5 @@ public interface CourseService {
 
     ResponseDto<GetCourseDetailResponseDto> getCourseById(Long id);
 
-    void deleteCourse(Long id);
+    ResponseDto<?> deleteCourse(Long id);
 }
