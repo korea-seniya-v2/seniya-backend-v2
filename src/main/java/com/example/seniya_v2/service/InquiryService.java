@@ -9,7 +9,6 @@ import com.example.seniya_v2.dto.inquiry.response.InquiryResponseDto;
 import com.example.seniya_v2.dto.inquiry.response.MyInquiryResponseDto;
 import jakarta.validation.Valid;
 
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 public interface InquiryService {
@@ -19,7 +18,7 @@ public interface InquiryService {
 
     ResponseDto<List<AllInquiryResponseDto>> getAllInquiry();
 
-    ResponseDto<InquiryByIdResponseDto> getInquiryDetail(String username, Long id)throws AccessDeniedException;
+    ResponseDto<InquiryByIdResponseDto> getInquiryDetail(String username, Long id);
 
     ResponseDto<InquiryResponseDto> updateInquiry(String username, Long id, @Valid InquiryRequestDto dto);
 
@@ -27,4 +26,3 @@ public interface InquiryService {
 
     ResponseDto<InquiryByIdResponseDto> inquiryAnswer(String username, Long id, @Valid InquiryAnswerRequestDto dto);
 }
-
