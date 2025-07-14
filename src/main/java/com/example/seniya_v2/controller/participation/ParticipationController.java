@@ -1,14 +1,11 @@
-package com.example.seniya_v2.controller.participationController;
+package com.example.seniya_v2.controller.participation;
 
 import com.example.seniya_v2.common.constants.ApiMappingPattern;
-import com.example.seniya_v2.dto.ResponseDto;
 import com.example.seniya_v2.dto.participation.response.ParticipationCancelResponseDto;
 import com.example.seniya_v2.dto.participation.response.ParticipationInfoResponseDto;
 import com.example.seniya_v2.dto.participation.response.ParticipationResponseDto;
 import com.example.seniya_v2.service.ParticipationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 

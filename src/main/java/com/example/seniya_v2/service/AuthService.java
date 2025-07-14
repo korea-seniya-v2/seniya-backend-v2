@@ -13,4 +13,9 @@ public interface AuthService {
     ResponseDto<UserSignInResponseDto> login(@Valid UserSignInRequestDto dto);
 
     ResponseDto<?> logout(String username);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
+
 }
