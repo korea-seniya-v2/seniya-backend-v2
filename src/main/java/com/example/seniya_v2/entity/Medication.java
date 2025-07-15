@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 @Getter
 @Builder
-public class Medication extends BaseTimeEntity{
+public class Medication {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long medicationId;
 

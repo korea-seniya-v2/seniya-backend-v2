@@ -11,6 +11,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Builder
 public class ParticipationResponseDto {
+    private Long participationId;
     private String category;
     private String title;
     private String description;

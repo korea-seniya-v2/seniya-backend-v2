@@ -22,7 +22,7 @@ public interface ApiMappingPattern {
     String HEALTH_DATA_API = "/api/v2/health-data";
 
     String POST_API = "/api/v2/posts";
-    String COMMENT_API = POST_API + "/api/v2/{postId}/comments";
+    String COMMENT_API = POST_API + "/{postId}/comments";
     String NOTICE_API = "/api/v2/notices";
     String INQUIRY_API = "/api/v2/inquiries";
 }

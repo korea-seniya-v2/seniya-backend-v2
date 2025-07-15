@@ -1,11 +1,8 @@
 package com.example.seniya_v2.provider;
 
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -13,49 +10,75 @@ import java.security.Key;
 import java.util.Date;
 
 @Component
-@RequiredArgsConstructor
 public class JwtTokenProvider {
-
-    @Value("${jwt.secret}")
-    private String secretKey;
-
-    @Value("${jwt.expiration}")
-    private int expirationTime;
-
-    private Key key;
+    private final Key key;
+    private final int jwtExpirationMs;
+    private final long jwtEmailExpirationMs;
 
     public int getExpiration() {
-        return expirationTime;
+        return jwtExpirationMs;
     }
 
-    @PostConstruct
-    public void init() {
-        key = Keys.hmacShaKeyFor(secretKey.getBytes());
+    public JwtTokenProvider(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration}") int jwtExpirationMs, @Value("${jwt.email-expiration-ms}") long jwtEmailExpirationMs) {
+        this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+        this.jwtExpirationMs = jwtExpirationMs;
+        this.jwtEmailExpirationMs = jwtEmailExpirationMs;
     }
 
     public String generateToken(String username, String role) {
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + expirationTime);
-
         return Jwts.builder()
-                .setSubject(username)
+                .claim("username", username)
                 .claim("role", role)
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public Long getUserId(String token) {
-        return Long.parseLong(Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject());
+    public String generateEmailToken(String email) {
+        return Jwts.builder()
+                .claim("email", email)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
     }
 
-    public boolean validateToken(String token) {
+    public String removeBearer(String bearerToken) {
+        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+            throw new RuntimeException("Invalid JWT token format");
+        }
+        return bearerToken.substring("Bearer ".length());
+    }
+
+    public boolean isValidToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            getClaims(token);
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (Exception e) {
             return false;
         }
+    }
+
+    public Claims getClaims(String token) {
+        JwtParser jwtParser = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build();
+        return jwtParser.parseClaimsJws(token).getBody();
+    }
+
+    public String getUsernameFromJwt(String token) {
+        Claims claims = getClaims(token);
+        return claims.get("username", String.class);
+    }
+
+    public String getRoleFromJwt(String token) {
+        Claims claims = getClaims(token);
+        return claims.get("role", String.class);
+    }
+
+    public String getEmailFromJwt(String token) {
+        Claims claims = getClaims(token);
+        return claims.get("email", String.class);
     }
 }
