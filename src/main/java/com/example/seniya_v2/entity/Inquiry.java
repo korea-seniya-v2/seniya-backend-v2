@@ -36,5 +36,6 @@ public class Inquiry extends BaseTimeEntity{
     private LocalDateTime responsedAt = LocalDateTime.now();
 
     @Builder.Default
-    private boolean isPrivated = false;
+    @Column(name = "is_privated", nullable = false)
+    private Boolean isPrivated = false;
 }

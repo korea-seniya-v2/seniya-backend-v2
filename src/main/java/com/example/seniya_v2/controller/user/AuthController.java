@@ -13,14 +13,11 @@ import com.example.seniya_v2.provider.JwtTokenProvider;
 import com.example.seniya_v2.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
 
-import java.util.AbstractMap;
 
 @RestController
 @RequestMapping(ApiMappingPattern.AUTH_API)

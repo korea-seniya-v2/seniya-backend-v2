@@ -92,11 +92,11 @@ public class TrainerProfileServiceImpl implements TrainerProfileService {
                 ).collect(Collectors.toList());
 
         if (file != null && !file.isEmpty()) {
-            saveFile(file, newTrainerProfile.getTrainerId(), TargetType.PROFILE);
+            saveFile(file, newTrainerProfile.getTrainerId(), TargetType.TRAINER_PROFILE);
         }
 
         String profileImageUrl = null;
-        Optional<UploadFile> profileUrl = fileRepo.findFirstByTargetIdAndTargetType(newTrainerProfile.getTrainerId(), TargetType.PROFILE);
+        Optional<UploadFile> profileUrl = fileRepo.findFirstByTargetIdAndTargetType(newTrainerProfile.getTrainerId(), TargetType.TRAINER_PROFILE);
         if (profileUrl.isPresent()) {
             profileImageUrl = profileUrl.get().getFilePath();
         }
@@ -135,7 +135,7 @@ public class TrainerProfileServiceImpl implements TrainerProfileService {
 
         String profileImageUrl = null;
 
-        Optional<UploadFile> profileUrl = fileRepo.findFirstByTargetIdAndTargetType(trainer.getTrainerId(), TargetType.PROFILE);
+        Optional<UploadFile> profileUrl = fileRepo.findFirstByTargetIdAndTargetType(trainer.getTrainerId(), TargetType.TRAINER_PROFILE);
 
         if (profileUrl.isPresent()) {
             profileImageUrl = profileUrl.get().getFilePath();
@@ -184,7 +184,7 @@ public class TrainerProfileServiceImpl implements TrainerProfileService {
         trainerProfileRepository.save(trainer);
 
         String profileImageUrl = null;
-        Optional<UploadFile> existingProfileImage = fileRepo.findFirstByTargetIdAndTargetType(trainer.getTrainerId(), TargetType.PROFILE);
+        Optional<UploadFile> existingProfileImage = fileRepo.findFirstByTargetIdAndTargetType(trainer.getTrainerId(), TargetType.TRAINER_PROFILE);
 
         if (file != null && !file.isEmpty()) {
             existingProfileImage.ifPresent(oldFile -> {
@@ -194,8 +194,8 @@ public class TrainerProfileServiceImpl implements TrainerProfileService {
                 }
                 fileRepo.delete(oldFile);
             });
-            saveFile(file, trainer.getTrainerId(), TargetType.PROFILE);
-            Optional<UploadFile> newFile = fileRepo.findFirstByTargetIdAndTargetType(trainer.getTrainerId(), TargetType.PROFILE);
+            saveFile(file, trainer.getTrainerId(), TargetType.TRAINER_PROFILE);
+            Optional<UploadFile> newFile = fileRepo.findFirstByTargetIdAndTargetType(trainer.getTrainerId(), TargetType.TRAINER_PROFILE);
             if (newFile.isPresent()) {
                 profileImageUrl = newFile.get().getFilePath();
             }

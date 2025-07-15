@@ -13,7 +13,6 @@ public class AllInquiryResponseDto {
     private Long id;
     private String username;
     private String title;
-    private String content;
     private Boolean isPrivated;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
