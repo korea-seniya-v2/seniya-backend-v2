@@ -2,8 +2,6 @@ package com.example.seniya_v2.common.constants;
 
 public interface ApiMappingPattern {
     String AUTH_API = "/api/v2/auth";
-    String EMAIL_API = "/email";
-    String EMAIL_VERIFY_API = AUTH_API + "/emailVerify";
     String USER_API = "/api/v2/users";
     String ADMIN_USER_API = "/api/v2/admin/users";
 
@@ -25,4 +23,5 @@ public interface ApiMappingPattern {
     String COMMENT_API = POST_API + "/{postId}/comments";
     String NOTICE_API = "/api/v2/notices";
     String INQUIRY_API = "/api/v2/inquiries";
+    String ANSWER_API = INQUIRY_API + "/{id}/answer";
 }

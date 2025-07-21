@@ -2,7 +2,6 @@ package com.example.seniya_v2.config;
 
 import com.example.seniya_v2.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +10,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -83,7 +81,9 @@ public class WebSecurityConfig {
 
                         .requestMatchers("/api/v2/user/**").hasRole("USER")
 
-                        .requestMatchers(HttpMethod.PUT,"/api/v2/inquiries/:id/response").hasRole("TRAINER")
+                        .requestMatchers("/api/v2/inquiries/{id}/answer").hasRole("ADMIN")
+                        .requestMatchers("/api/v2/inquiries/**").hasRole("USER")
+
                         .requestMatchers(HttpMethod.POST, "/api/v2/trainer-profiles/me").hasRole("TRAINER")
                         .requestMatchers(HttpMethod.GET, "/api/v2/trainer-profiles/me").hasRole("TRAINER")
                         .requestMatchers(HttpMethod.PUT, "/api/v2/trainer-profiles/me").hasRole("TRAINER")

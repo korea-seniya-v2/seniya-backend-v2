@@ -1,5 +1,6 @@
 package com.example.seniya_v2.dto.inquiry.response;
 
+import com.example.seniya_v2.common.enums.InquiryStatus;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -11,9 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MyInquiryResponseDto {
     private String title;
-    private String content;
-    private String response;
-    private Boolean isPrivated;
+    private InquiryStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

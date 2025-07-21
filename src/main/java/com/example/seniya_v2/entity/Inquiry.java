@@ -1,9 +1,8 @@
 package com.example.seniya_v2.entity;
 
+import com.example.seniya_v2.common.enums.InquiryStatus;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "inquiries")
@@ -21,21 +20,17 @@ public class Inquiry extends BaseTimeEntity{
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "trainer_id")
-    private TrainerProfile trainer;
-
     @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "content", nullable = false)
     private String content;
 
-
-    private String response;
-    private LocalDateTime responsedAt = LocalDateTime.now();
-
+    @Enumerated(EnumType.STRING)
     @Builder.Default
-    @Column(name = "is_privated", nullable = false)
-    private Boolean isPrivated = false;
+    @Column(name = "inquiry_status")
+    private InquiryStatus status = InquiryStatus.WAITING;
+
+    @OneToOne(mappedBy = "inquiry", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Answer answer;
 }

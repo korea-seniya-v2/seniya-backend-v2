@@ -21,7 +21,7 @@
                       ON u.user_id = tp.user_id
                  LEFT JOIN upload_files uf
                            ON uf.target_id = tp.trainer_id
-                               AND uf.target_type = 'PROFILE'
+                               AND uf.target_type = 'TRAINER_PROFILE'
         GROUP BY tp.trainer_id, u.name, tp.specialty, uf.file_path
         ORDER BY courseCount DESC
             LIMIT 1;
