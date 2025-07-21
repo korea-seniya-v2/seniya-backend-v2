@@ -1,5 +1,6 @@
 package com.example.seniya_v2.dto.inquiry.response;
 
+import com.example.seniya_v2.common.enums.InquiryStatus;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -10,10 +11,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AllInquiryResponseDto {
-    private Long id;
-    private String username;
+    private Long inquiryId;
     private String title;
-    private Boolean isPrivated;
+    private String userName;
+    private InquiryStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

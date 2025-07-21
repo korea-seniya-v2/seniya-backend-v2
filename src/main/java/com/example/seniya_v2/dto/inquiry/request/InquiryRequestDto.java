@@ -8,5 +8,4 @@ import lombok.NoArgsConstructor;
 public class InquiryRequestDto {
     private String title;
     private String content;
-    private Boolean isPrivated;
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Setter
 @Getter
@@ -15,7 +16,7 @@ public class InquiryResponseDto {
     private Long inquiryId;
     private String title;
     private String content;
-    private Boolean isPrivated;
+    private List<String> InquiryImageUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
