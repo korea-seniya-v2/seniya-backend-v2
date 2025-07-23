@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MyInquiryResponseDto {
+    private Long inquiryId;
     private String title;
     private InquiryStatus status;
     private LocalDateTime createdAt;
