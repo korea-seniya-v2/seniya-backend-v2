@@ -9,6 +9,7 @@ import com.example.seniya_v2.dto.inquiry.response.AllInquiryResponseDto;
 import com.example.seniya_v2.dto.inquiry.response.InquiryByIdResponseDto;
 import com.example.seniya_v2.dto.inquiry.response.InquiryResponseDto;
 import com.example.seniya_v2.dto.inquiry.response.MyInquiryResponseDto;
+import com.example.seniya_v2.entity.Answer;
 import com.example.seniya_v2.entity.Inquiry;
 import com.example.seniya_v2.entity.UploadFile;
 import com.example.seniya_v2.entity.User;
@@ -112,6 +113,7 @@ public class InquiryServiceImpl implements InquiryService {
 
         response = inquiries.stream()
                 .map(inquiry -> MyInquiryResponseDto.builder()
+                        .inquiryId(inquiry.getInquiryId())
                         .title(inquiry.getTitle())
                         .status(inquiry.getStatus())
                         .createdAt(inquiry.getCreatedAt())
@@ -162,13 +164,23 @@ public class InquiryServiceImpl implements InquiryService {
                 .map(UploadFile::getFilePath)
                 .collect(Collectors.toList());
 
+        Answer answer = inquiry.getAnswer();
+        String admin = null;
+        String answerContent = null;
+
+        if(answer != null) {
+            admin = answer.getUser().getName();
+            answerContent = answer.getContent();
+        }
+
         response = InquiryByIdResponseDto.builder()
                 .title(inquiry.getTitle())
                 .username(inquiry.getUser().getName())
                 .content(inquiry.getContent())
+                .admin(admin)
                 .status(inquiry.getStatus())
-                .answer(inquiry.getAnswer())
-                .InquiryImageUrl(imageUrl)
+                .answer(answerContent)
+                .inquiryImageUrl(imageUrl)
                 .createdAt(inquiry.getCreatedAt())
                 .build();
 

@@ -15,7 +15,7 @@ public interface CourseService {
 
     ResponseDto<UpdateCourseResponseDto> updateCourse(Long id, @Valid UpdateCourseRequestDto dto);
 
-    ResponseDto<List<CourseResponseDto>> geAllCourses();
+    ResponseDto<List<CourseResponseDto>> getAllCourses();
 
     ResponseDto<GetCourseDetailResponseDto> getCourseById(Long id);
 

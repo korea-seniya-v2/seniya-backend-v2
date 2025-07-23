@@ -93,7 +93,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public ResponseDto<List<CourseResponseDto>> geAllCourses() {
+    public ResponseDto<List<CourseResponseDto>> getAllCourses() {
         List<CourseResponseDto> respDto = null;
 
         List<Course> courses = courseRepository.findAll();

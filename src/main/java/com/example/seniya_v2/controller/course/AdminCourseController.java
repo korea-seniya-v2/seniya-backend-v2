@@ -40,7 +40,7 @@ public class AdminCourseController {
 
     @GetMapping
     public ResponseEntity<ResponseDto<List<CourseResponseDto>>> getAllCourses() {
-        ResponseDto<List<CourseResponseDto>> response = courseService.geAllCourses();
+        ResponseDto<List<CourseResponseDto>> response = courseService.getAllCourses();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
